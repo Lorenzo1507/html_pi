@@ -157,148 +157,94 @@ tempo de treinamento, as funções usadas, que serão apresentadas no desenvolvi
                 <p>
                     Seguindo para o Treinamento, ainda temos diversas funções para que ele possa ocorrer corretamente. Que são as seguintes:
                     <ui>
-                        <li><strong>Gráfico de imagem:</strong></li>
+                        <li><strong> Carregar modelo e classes de placas</strong></li>
                         <p><em>
-                            <strong>def plot_images(images, classes):</strong>
-                            <br>&ensp;assert len(images) == len(classes) == 9
-                            
-                            <br>&ensp;<strong># Cria uma imagem com sub-plots 3x3 .</strong>
-                            <br>&ensp;fig, axes = plt.subplots(3, 3,figsize=(60,60),sharex=True)
-                            <br>&ensp;fig.subplots_adjust(hspace=0.3, wspace=0.3)
-                        
-                            <br><br>&ensp;for i, ax in enumerate(axes.flat):
-                            <br>&emsp;<strong># Faz o gráfico da imagem.</strong>
-                                
-                            <br>&emsp;ax.imshow(cv2.cvtColor(images[i],cv2.COLOR_BGR2RGB).reshape(img_width,img_height,3), cmap='hsv')    
-                            <br>&emsp;xlabel = "Breed: {0}".format(classes[i])
-                            
-                            <br><br>&emsp;<strong># Mostra classes como label no eixo X.</strong>
-                            <br>&emsp;ax.set_xlabel(xlabel)
-                            <br>&emsp;ax.xaxis.label.set_size(60)
+                            <strong>model = load_model('ModelDAv.h5')</strong>
+                            <br>
+                            <br>
 
-                            <br><br>&emsp;<strong># Remove os ticks do gráfico.</strong>
-                            <br>&emsp;ax.set_xticks([])
-                            <br>&emsp;ax.set_yticks([])
-                            
-                            <br>&ensp;<strong># Garante de que o gráfico seja mostrado corretamente com vários gráficos em apenas uma célula.</strong>
-
-                            <br>&ensp;plt.show()
+                            <strong>boardClasses</strong>
+                            = ['Speed limit (20km/h)',
+                            <br>'Speed limit (30km/h)',
+                            <br>'Speed limit (50km/h)',
+                            <br>'Speed limit (60km/h)',
+                            <br>'Speed limit (70km/h)',
+                            <br>'Speed limit (80km/h)',
+                            <br>'End of speed limit (80km/h)',
+                            <br>'Speed limit (100km/h)',
+                            <br>'Speed limit (120km/h)',
+                            <br>'No passing',
+                            <br>'No passing for vechiles over 3.5 metric tons',
+                            <br>'Right-of-way at the next intersection',
+                            <br>'Priority road',
+                            <br>'Yield',
+                            <br>'Stop',
+                            <br>'No vechiles',
+                            <br>'Vechiles over 3.5 metric tons prohibited',
+                            <br>'No entry',
+                            <br>'General caution',
+                            <br>'Dangerous curve to the left',
+                            <br>'Dangerous curve to the right',
+                            <br>'Double curve',
+                            <br>'Bumpy road',
+                            <br>'Slippery road',
+                            <br>'Road narrows on the right',
+                            <br>'Road work',
+                            <br>'Traffic signals',
+                            <br>'Pedestrians',
+                            <br>'Children crossing',
+                            <br>'Bicycles crossing',
+                            <br>'Beware of ice/snow',
+                            <br>'Wild animals crossing',
+                            <br>'End of all speed and passing limits',
+                            <br>'Turn right ahead',
+                            <br>'Turn left ahead',
+                            <br>'Ahead only',
+                            <br>'Go straight or right',
+                            <br>'Go straight or left',
+                            <br>'Keep right',
+                            <br>'Keep left',
+                            <br>'Roundabout mandatory',
+                            <br>'End of no passing',
+                            <br>'End of no passing by vechiles over 3.5 metric tons']
                         </em></p>
 
-                        <br><br><li><strong>Seleção e plot de imagens:</strong></li>
+                        <br><br><li><strong>Criação do cliente</strong></li>
                         <p><em>
-                            <strong># seleciona imagens aleatórias</strong>
-                            <br>random_numbers = [randint(0, len(images)) for p in range(9,18)]
-                            <br>print(random_numbers)
-                            <br>images_to_show = [images[i] for i in random_numbers]
-                            <br>classes_to_show = [classes[i] for i in random_numbers]
-                            <br>print("Images to show: {0}".format(len(images_to_show)))
-                            <br>print("Classes to show: {0}".format(len(classes_to_show)))
-
-                            
-                            <br><br><strong>#plota as imagens</strong>
-                            <br>plot_images(images_to_show, classes_to_show)
-
-                        </em></p>
-
-                        <br><br><li><strong>Conversão dos dados da imagem para numpy array:</strong></li>
-                        <p><em>
-                            <strong># Cria matrix numpy com vários zeros</strong>
-                            <br>X_data = np.zeros((len(labels), 28, 28, 3), dtype='float32')
-                            <br>Y_data = label_binarize(labels['breed'], classes = CLASS_NAMES)
-
-                            <br><br><strong># Lendo e convertendo imagem para numpy array e normalizando os dados</strong>
-                            <br>for i in tqdm(range(len(labels))):
-                            <br>&emsp;img = load_img(caminho + 'train/%s.jpg' % labels['id'][i], target_size=(28, 28))
-                            <br>&emsp;img = img_to_array(img)
-                            <br>&emsp;x = np.expand_dims(img.copy(), axis=0)
-                            <br>&emsp;X_data[i] = x / 255.0
-
-                            <br><strong># Imprimindo a imagem</strong>
-                            <br>print('\nTrain Images shape: ',X_data.shape,' size: {:,}'.format(X_data.size))
-                            <br>print('One-hot encoded output shape: ',Y_data.shape,' size: {:,}'.format(Y_data.size))
+                            <br>client = discord.Client()
+                            <br>client = commands.Bot(command_prefix='.')
 
                         </em></p>
 
-                        <br><br><li><strong>Construção do modelo:</strong></li>
+                        <br><br><li><strong>Registro de evento e preparação do bot</strong></li>
                         <p><em>
-                            <strong># Construindo o Model</strong>
-                            <br>model = Sequential()
-                            <br>model.add(Conv2D(filters = 64, kernel_size = (5,5), activation ='softmax', input_shape = (28,28,3)))
-                            <br>model.add(MaxPool2D(pool_size=(5,5)))
+                            <strong>#registra o evento</strong>
+                            <br>@client.event 
 
-                            <br><br>model.add(Flatten())
-                            <br>model.add(Dense(128, activation = "softmax"))
-                            <br>model.add(Dense(64, activation = "softmax"))
-                            <br>model.add(Dense(len(CLASS_NAMES), activation = "softmax"))
-
-                            <br><br>model.compile(loss = 'mean_squared_error', optimizer = Adam(0.0001),metrics=['accuracy'])
-
-                            <br><br>model.summary()
-
+                            <br><br><strong>#Bot pronto para começar a ser usado</strong>
+                            <br>async def on_ready():
+                            <br>&emsp;print('Conectado {0.user}'.format(client))
                         </em></p>
 
-                        <br><br><li><strong>Repartir os dados:</strong></li>
+                        <br><br><li><strong>Comandos no discord e análise da imagem</strong></li>
                         <p><em>
-                            <strong># Repartindo os dados em dados de treinamento e teste</strong>
-                            <br>X_train_and_val, X_test, Y_train_and_val, Y_test = train_test_split(X_data, Y_data, test_size = 0.001)
+                            <strong>#dispara sempre que uma mensagem não autoral é recebida</strong>
+                            <br>@client.event
+                            <br>async def on_message(message):
+                            <br>&ensp;if message.author == client.user:
+                            <br>&emsp;return
 
-                            <br><br><strong># Repartindo os dados de treinamento em dados de treinamento e validação</strong>
-                            <br>X_train, X_val, Y_train, Y_val = train_test_split(X_train_and_val, Y_train_and_val, test_size = 0.002)
+                            <br>&ensp;if message.content.startswith('$oi'):
+                            <br>&emsp;await message.channel.send('Eae meu consagrado')
 
-                        </em></p>
+                            <br><br>image_shape = (50,50)
+                            <br>img = Image.open(dir_path + 'to.jpg').convert('RGB')
+                            <br>img = img.resize(image_shape)
+                            <br>img = np.expand_dims(img, axis=0)
+                            <br>img = np.array(img)
 
-                        <br><br><li><strong>Treinando o modelo:</strong></li>
-                        <p><em>
-                            <strong># Treinando o modelo</strong>
-                            <br>epochs = 15
-                            <br>batch_size = 128
-                            
-                            <br><br>history = model.fit(X_train, Y_train, batch_size = batch_size, epochs = epochs, 
-                                                validation_data = (X_val, Y_val))
-
-                            <br><br><strong># Nesta parte o código calcula a precisão de acerto do teste</strong>
-
-                            <br>Y_pred = model.predict(X_test)
-                            <br>score = model.evaluate(X_test, Y_test)
-                            <br>print('Accuracy over the test set: \n ', round((score[1]*100), 2), '%')
-
-                            <br><br><strong># Salva o modelo</strong>
-                            <br>model.save('modelodog3.h5') #salvar o modelo usado para o bot
-
-                            <br><br><strong># Carrega o modelo</strong>
-                            <br>model = models.load_model('modelodog3.h5')
-
-                        </em></p>
-
-                        <br><br><li><strong>Reconhecendo enfim da imagem:</strong></li>
-                        <p><em>
-                            <strong>import</strong> cv2
-                            <br><strong># Caminho da imagem</strong>
-                            <br>path = caminho + 'cachorroTeste.jpg'
-                            
-                            <br><br><strong># Nome da janela que a imagem é mostrada</strong>
-                            <br>window_name = 'batata'
-
-                            <br><br><strong># Usando o método cv2.imshow()</strong>
-                            <br><strong># Mostrando imagem</strong>
-                            <br>cv2.imshow(window_name, image)
-
-                            <br><br><strong># Espera o usuário apertar qualquer tecla (isso é necessário para evitar o travamento do formulário do kernel do Python).</strong>
-                            <br>cv2.waitKey(0)
-
-                            <br><br><strong># Fecha todas as janelas abertas</strong>
-                            <br>cv2.destroyAllWindows()
-
-                            <br><br><strong># Plota a imagem</strong>
-                            <br>plt.imshow(img)
-                            <br>plt.show()
-
-                            <br><br><strong> # Pegando o maior valor da lista de predição e comparando o original com a predição</strong>
-                            <br>print("Originally : ",labels['breed'][np.argmax(Y_test[0])])
-                            <br>print("Predicted : ",labels['breed'][np.argmax(Y_pred[0])])
-
-
+                            <br><br>index = (np.argmax(predictions, axis = 1))
+                            <br>board = boardClasses[int(index)]
                         </em></p>
                     </ui>
                 </p>
@@ -307,9 +253,8 @@ tempo de treinamento, as funções usadas, que serão apresentadas no desenvolvi
                 </p>
 
                 <ui>
-                    <li>Usar softmax é melhor do que usar relo. Softmax nos retorna mais parametros de treino</li>
-                    <li>categorical_crossentropy aumenta o loss</li>
-                    <li>mean_squared_error deixa o loss bem baixo. Diminui de 7,xxx para 2,xxxx</li>
+                    <li>Modelo = 17 epochs, porque modelos com 25 epochs ou mais acabam tendo um overfit maior (loss maior), a acuracia continua dentro da casa de 99%</li>
+                    <li>Menos epochs mantém a acuracia de 99% e abaixa o overfit (loss)</li>
                 </ui>
             </section>
 
