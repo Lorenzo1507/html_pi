@@ -114,40 +114,9 @@ tempo de treinamento, as funções usadas, que serão apresentadas no desenvolvi
                 </ul>
  
             </section>
+            
             <section>
-                <h2>3   Preparação dos dados</h2>
-                <p>Nesta parte, mostramos uma parte de código da qual vizualiza as classes dos cachorros disponíveis.
-                    Encontramos a contagem por cada classe, isto é, o total de dados em cada classe usando value_counts()
-                </p>
-                <p>
-                    <em>
-                        breeds_all = df_train["breed"]
-                        <br>breed_counts = breeds_all.value_counts()
-                        <br>breed_counts.head(120)
-                    </em>
-                </p>
-                <p>
-                    Aqui carregamos as imagens do treino.
-                </p>
-                <p>
-                    <em>
-                        mg_width=250
-                        <br>img_height=250
-                        <br>images=[]
-                        <br>classes=[]
-                        <br>
-                        <br>
-                        <strong>#carrega as imagens em treinamento</strong>
-                        <br>for f, breed in tqdm(df_train.values):
-                        <br>&emsp;img = cv2.imread(caminho + 'train/{}.jpg'.format(f))
-                        <br>&emsp;classes.append(breed)
-                        <br>&emsp;images.append(cv2.resize(img, (img_width, img_height)))
-                    </em>
-                </p>
-                
-            </section>
-            <section>
-                <h2>4   Modelo e Treinamento</h2>
+                <h2>3  Modelo e Treinamento</h2>
                 <p>
                     Primeiramente, para podermos efetivamente classificar as imagens, pegamos um conjunto prévio de imagens classificadas
                     para que o modelo pudesse ser treinado e calibrado. Para que o modelo conseguisse generalizar a classificação, foi necessário um enorme conjunto
@@ -259,7 +228,7 @@ tempo de treinamento, as funções usadas, que serão apresentadas no desenvolvi
             </section>
 
             <section>
-                <h2>5  Conclusão</h2>
+                <h2>4  Conclusão</h2>
                 <p>Conseguimos fazer o programa a guardar os padrões através da análise dos pixels das imagens já pré-definidas.
                     Pegamos as imagens e convertemos todos os dados dos pixels para formato de array.
                     Nisso criamos os modelos que vão guardando os padrões de diversas imagens à serem reconhecidas, gerando então o aprendizado em si.
